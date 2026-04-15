@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Foodie</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF4757;
+            --primary-dark: #E03B49;
+            --secondary: #2F3542;
+            --bg: #F1F2F6;
+            --surface: #FFFFFF;
+            --text: #2F3542;
+            --text-light: #747D8C;
+            --success: #2ED573;
+            --warning: #FFA502;
+            --danger: #FF6B81;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding-bottom: 40px;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Poppins', sans-serif;
+            margin-top: 0;
+            color: var(--secondary);
+        }
+
+        /* Navbar */
+        .navbar {
+            background: var(--secondary);
+            padding: 15px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            color: white;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .nav-links a.logout {
+            background: rgba(255, 71, 87, 0.2);
+            padding: 6px 12px;
+            border-radius: 4px;
+            color: var(--primary);
+        }
+
+        .nav-links a.logout:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .section {
+            background: var(--surface);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        /* Forms */
+        input,
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 8px 0 20px 0;
+            border: 1px solid #E1E1E1;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* Buttons */
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success);
+        }
+
+        .btn-success:hover {
+            background: #26af61;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: var(--secondary);
+        }
+
+        .btn-warning:hover {
+            background: #e59400;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: #ff4757;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.85rem;
+        }
+
+        /* Cards */
+        .restaurant-card {
+            background: #FAFAFA;
+            border: 1px solid #EEE;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+
+        .restaurant-card:hover {
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transform: translateX(5px);
+            border-color: var(--primary);
+        }
+
+        .restaurant-info h3 {
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .restaurant-info p {
+            margin: 2px 0;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* Menu Items */
+        .menu-item-box {
+            background: #FAFAFA;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #EEE;
+            margin-bottom: 10px;
+        }
+
+        .menu-item-in-list {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #EEE;
+        }
+
+        .menu-item-in-list:last-child {
+            border-bottom: none;
+        }
+
+        /* Login Overlay */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(47, 53, 66, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+
+        .login-box {
+            background: var(--surface);
+            padding: 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-box h2 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .login-error {
+            color: var(--danger);
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(3px);
+        }
+
+        .modal-content {
+            background-color: var(--surface);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .close:hover {
+            color: var(--danger);
+        }
+
+        .msg {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .msg.success {
+            background: #E3F9E5;
+            color: #1F7A34;
+        }
+
+        .msg.error {
+            background: #FFF0F3;
+            color: var(--danger);
+        }
+
+        .admin-content {
+            display: none;
+        }
+
+        .admin-content.active {
+            display: block;
+        }
+
+        .loading {
+            text-align: center;
+            color: var(--text-light);
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Login Overlay -->
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-box">
+            <div style="font-size: 50px; margin-bottom: 10px;">🔐</div>
+            <h2>Admin Access</h2>
+            <p style="color: var(--text-light); margin-bottom: 30px;">Please verify your identity to continue.</p>
+
+            <input type="password" id="adminPassword" placeholder="Enter Password" autocomplete="off"
+                onkeypress="if(event.key==='Enter') checkPassword()" style="text-align: center; letter-spacing: 2px;">
+
+            <button class="btn btn-success" onclick="checkPassword()" style="width: 100%;">Login to Dashboard</button>
+
+            <div style="margin-top: 15px;">
+                <a href="index.html" style="color: var(--text-light); text-decoration: none; font-size: 0.9rem;">← Back
+                    to Customer View</a>
+            </div>
+
+            <div class="login-error" id="loginError">Incorrect password</div>
+        </div>
+    </div>
+
+    <!-- Admin Content -->
+    <div id="adminContent" class="admin-content">
+
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    🛠️ Admin Dashboard
+                </div>
+                <div class="nav-links">
+                    <a href="index.html" onclick="sessionStorage.removeItem('adminLoggedIn')">👤 Customer View</a>
+                    <a href="#" onclick="location.reload()">🔄 Refresh</a>
+                    <a href="#" onclick="logout()" class="logout">🚪 Logout</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+
+            <!-- Add Restaurant Section -->
+            <div class="section">
+                <h2 style="margin-bottom: 20px; border-bottom: 2px solid #F0F0F0; padding-bottom: 15px;">
+                    ➕ Add New Restaurant
+                </h2>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <label>Restaurant Name</label>
+                        <input id="newRestName" type="text" placeholder="e.g. The Burger Joint">
+                    </div>
+                    <div>
+                        <label>Contact Number</label>
+                        <input id="newRestContact" type="text" placeholder="e.g. 9876543210">
+                    </div>
+                </div>
+
+                <label>Location / Address</label>
+                <input id="newRestLocation" type="text" placeholder="e.g. 123 Main Street, Dehradun">
+
+                <div style="background: #F8F9FA; padding: 20px; border-radius: 12px; margin-top: 20px;">
+                    <h3 style="font-size: 1rem; margin-bottom: 15px;">Initial Menu Items</h3>
+                    <div id="newMenuContainer"></div>
+                    <button class="btn btn-sm btn-warning" type="button" onclick="addNewRestaurantMenuItemField()">
+                        + Add Item
+                    </button>
+                </div>
+
+                <div style="margin-top: 25px; text-align: right;">
+                    <button class="btn btn-success" onclick="addNewRestaurant()">Create Restaurant</button>
+                </div>
+                <div id="addRestMsg"></div>
+            </div>
+
+            <!-- Restaurants List -->
+            <div class="section">
+                <h2 style="margin-bottom: 20px;">📋 Managed Restaurants</h2>
+                <div id="restaurantsList" class="loading">Loading data...</div>
+            </div>
+
+            <!-- Add Menu Items Section (Hidden by default) -->
+            <div class="section" id="addMenuSection" style="display: none; border: 2px solid var(--primary);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 id="addMenuTitle" style="margin: 0; color: var(--primary);">Manage Menu</h2>
+                    <button class="btn btn-sm btn-outline" onclick="cancelAddMenu()"
+                        style="background: #FFF; color: var(--text-light); border: 1px solid #DDD;">Close</button>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                    <!-- Existing Items -->
+                    <div>
+                        <h3 style="font-size: 1rem; color: var(--text-light); margin-bottom: 15px;">Current Menu</h3>
+                        <div id="existingMenuList" style="max-height: 400px; overflow-y: auto; padding-right: 10px;">
+                        </div>
+                    </div>
+
+                    <!-- Add New Items -->
+                    <div>
+                        <h3 style="font-size: 1rem; color: var(--text-light); margin-bottom: 15px;">Add New Items</h3>
+                        <div id="addMenuContainer"></div>
+                        <button class="btn btn-sm btn-warning" onclick="addMenuItemField()"
+                            style="margin-bottom: 20px;">+ Add Another Field</button>
+
+                        <div style="border-top: 1px solid #EEE; padding-top: 20px;">
+                            <button class="btn btn-success" onclick="submitMenuItems()" style="width: 100%;">Save New
+                                Items</button>
+                        </div>
+                        <div id="addMenuMsg"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Restaurant Modal -->
+        <div id="editRestModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeEditModal()">&times;</span>
+                <h2>Edit Restaurant</h2>
+                <input type="hidden" id="editRestId">
+
+                <label>Name</label>
+                <input id="editRestName" type="text">
+
+                <label>Location</label>
+                <input id="editRestLocation" type="text">
+
+                <label>Contact</label>
+                <input id="editRestContact" type="text">
+
+                <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end;">
+                    <button class="btn btn-danger" onclick="closeEditModal()">Cancel</button>
+                    <button class="btn btn-success" onclick="updateRestaurant()">Save Changes</button>
+                </div>
+                <div id="editRestMsg"></div>
+            </div>
+        </div>
+
+        <!-- Edit Menu Item Modal -->
+        <div id="editMenuModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeEditMenuModal()">&times;</span>
+                <h2>Edit Menu Item</h2>
+                <input type="hidden" id="editMenuId">
+                <input type="hidden" id="editMenuRestId">
+
+                <label>Item Name</label>
+                <input id="editMenuItemName" type="text">
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <label>Price (₹)</label>
+                        <input id="editMenuPrice" type="number" step="0.01">
+                    </div>
+                    <div>
+                        <label>Category</label>
+                        <input id="editMenuCategory" type="text">
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end;">
+                    <button class="btn btn-danger" onclick="closeEditMenuModal()">Cancel</button>
+                    <button class="btn btn-success" onclick="updateMenuItem()">Save Changes</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logout Modal -->
+        <div id="logoutModal" class="modal">
+            <div class="modal-content" style="max-width: 400px; text-align: center;">
+                <h2>Confirm Logout</h2>
+                <p>Are you sure you want to log out?</p>
+                <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                    <button class="btn btn-outline" onclick="closeLogoutModal()"
+                        style="border: 1px solid #DDD; background: white; color: var(--text);">Cancel</button>
+                    <button class="btn btn-danger" onclick="performLogout()">Logout</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let restaurants = [];
+        let currentRestaurantId = null;
+        let menuItemsCount = 0;
+        let newRestMenuCount = 0;
+
+        function loadRestaurants() {
+            const list = document.getElementById("restaurantsList");
+            list.innerHTML = '<div class="loading">Loading restaurants...</div>';
+
+            fetch("http://localhost:3000/restaurants")
+                .then(res => res.json())
+                .then(data => {
+                    restaurants = data.restaurants || data;
+                    displayRestaurants();
+                })
+                .catch(err => {
+                    list.innerHTML = `<div class="msg error">Error loading restaurants: ${err.message}</div>`;
+                    console.error(err);
+                });
+        }
+
+        function displayRestaurants() {
+            const list = document.getElementById("restaurantsList");
+
+            if (restaurants.length === 0) {
+                list.innerHTML = '<div class="msg">No restaurants found. Add one above!</div>';
+                return;
+            }
+
+            list.innerHTML = "";
+            restaurants.forEach(rest => {
+                const div = document.createElement("div");
+                div.className = "restaurant-card";
+                div.innerHTML = `
+                    <div class="restaurant-info">
+                        <h3>${rest.Name}</h3>
+                        <p>📍 ${rest.Location}</p>
+                        <p>📞 ${rest.Contact || 'N/A'}</p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-sm" onclick="viewRestaurantMenu(${rest.RestaurantID}, '${rest.Name.replace(/'/g, "\\'")}')">Manage Menu</button>
+                        <button class="btn btn-sm btn-warning" onclick="editRestaurant(${rest.RestaurantID})">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteRestaurant(${rest.RestaurantID}, '${rest.Name.replace(/'/g, "\\'")}')">Delete</button>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function addNewRestaurant() {
+            const name = document.getElementById("newRestName").value.trim();
+            const location = document.getElementById("newRestLocation").value.trim();
+            const contact = document.getElementById("newRestContact").value.trim();
+            const msgDiv = document.getElementById("addRestMsg");
+
+            if (!name || !location || !contact) {
+                msgDiv.innerHTML = '<div class="msg error">Please fill in all fields!</div>';
+                return;
+            }
+
+            const itemNames = document.querySelectorAll('.newRestItemName');
+            const prices = document.querySelectorAll('.newRestPrice');
+            const categories = document.querySelectorAll('.newRestCategory');
+
+            if (itemNames.length === 0) {
+                msgDiv.innerHTML = '<div class="msg error">Please add at least one menu item.</div>';
+                return;
+            }
+
+            let menuItems = [];
+            for (let i = 0; i < itemNames.length; i++) {
+                const itemName = (itemNames[i]?.value || '').trim();
+                const price = (prices[i]?.value || '').trim();
+                const category = (categories[i]?.value || '').trim();
+                if (!itemName || !price) {
+                    msgDiv.innerHTML = '<div class="msg error">Please fill in all menu item details!</div>';
+                    return;
+                }
+                menuItems.push({
+                    ItemName: itemName,
+                    Price: parseFloat(price),
+                    Category: category || 'General'
+                });
+            }
+            msgDiv.innerHTML = '<div class="loading">Creating...</div>';
+            fetch("http://localhost:3000/addRestaurantWithMenu", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    Name: name,
+                    Location: location,
+                    Contact: contact,
+                    MenuItems: menuItems
+                })
+            })
+                .then(async res => {
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.error || data.message);
+                    return data;
+                })
+                .then(data => {
+                    msgDiv.innerHTML = `<div class="msg success">Restaurant created successfully!</div>`;
+                    document.getElementById("newRestName").value = "";
+                    document.getElementById("newRestLocation").value = "";
+                    document.getElementById("newRestContact").value = "";
+                    document.getElementById('newMenuContainer').innerHTML = '';
+                    newRestMenuCount = 0;
+                    setTimeout(() => {
+                        loadRestaurants();
+                        msgDiv.innerHTML = "";
+                    }, 2000);
+                })
+                .catch(err => {
+                    msgDiv.innerHTML = `<div class="msg error">Error: ${err.message}</div>`;
+                });
+        }
+
+        function viewRestaurantMenu(restId, restName) {
+            currentRestaurantId = restId;
+            const section = document.getElementById("addMenuSection");
+            const title = document.getElementById("addMenuTitle");
+            title.textContent = `Manage Menu: ${restName}`;
+            section.style.display = "block";
+            document.getElementById("addMenuContainer").innerHTML = "";
+            document.getElementById("existingMenuList").innerHTML = '<div class="loading">Loading...</div>';
+            menuItemsCount = 0;
+            addMenuItemField();
+
+            fetch(`http://localhost:3000/restaurants/${restId}/menu`)
+                .then(res => res.json())
+                .then(data => {
+                    const items = data.menu || data;
+                    const list = document.getElementById('existingMenuList');
+                    if (!Array.isArray(items) || items.length === 0) {
+                        list.innerHTML = '<div class="msg">No existing items.</div>';
+                        return;
+                    }
+                    list.innerHTML = '';
+                    items.forEach(i => {
+                        const div = document.createElement('div');
+                        div.className = 'menu-item-in-list';
+                        div.setAttribute('data-menuid', i.MenuID);
+                        div.innerHTML = `
+                            <div>
+                                <h4 style="margin:0; color: var(--secondary);">${i.ItemName}</h4>
+                                <p style="margin:4px 0; font-size: 0.85rem; color: var(--text-light);">
+                                    ${i.Category || 'General'} • <span style="color: var(--primary); font-weight: 600;">₹${i.Price}</span>
+                                </p>
+                            </div>
+                            <div style="display:flex; gap:5px;">
+                                <button class="btn btn-sm btn-outline" style="border: 1px solid #ddd; color: #666;" onclick="editMenuItem(${i.MenuID}, ${i.RestaurantID})">✏️</button>
+                                <button class="btn btn-sm btn-outline" style="border: 1px solid #ffcccc; color: var(--danger);" onclick="deleteMenuItem(${i.MenuID}, '${(i.ItemName || '').replace(/'/g, "\\'")}')">🗑️</button>
+                            </div>
+                        `;
+                        list.appendChild(div);
+                    });
+                })
+                .catch(err => {
+                    document.getElementById('existingMenuList').innerHTML = `<div class="msg error">Error: ${err.message}</div>`;
+                });
+
+            section.scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+
+        function cancelAddMenu() {
+            document.getElementById("addMenuSection").style.display = "none";
+            document.getElementById("addMenuContainer").innerHTML = "";
+            document.getElementById("existingMenuList").innerHTML = "";
+            document.getElementById("addMenuMsg").innerHTML = "";
+            menuItemsCount = 0;
+            currentRestaurantId = null;
+        }
+
+        function addMenuItemField() {
+            menuItemsCount++;
+            const container = document.getElementById("addMenuContainer");
+            const item = document.createElement("div");
+            item.className = "menu-item-box";
+            item.innerHTML = `
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <h4 style="margin:0; font-size: 0.9rem;">New Item #${menuItemsCount}</h4>
+                    <button type="button" onclick="this.parentElement.parentElement.remove(); menuItemsCount--;" style="background:none; border:none; color: var(--danger); cursor: pointer;">✕</button>
+                </div>
+                <input type="text" placeholder="Item Name" class="newItemName" required>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <input type="number" placeholder="Price" step="0.01" min="0" class="newPrice" required>
+                    <input type="text" placeholder="Category" class="newCategory">
+                </div>
+            `;
+            container.appendChild(item);
+        }
+
+        function addNewRestaurantMenuItemField() {
+            newRestMenuCount++;
+            const container = document.getElementById("newMenuContainer");
+            const item = document.createElement("div");
+            item.className = "menu-item-box";
+            item.innerHTML = `
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <h4 style="margin:0; font-size: 0.9rem;">Item #${newRestMenuCount}</h4>
+                    <button type="button" onclick="this.parentElement.parentElement.remove(); newRestMenuCount--;" style="background:none; border:none; color: var(--danger); cursor: pointer;">✕</button>
+                </div>
+                <input type="text" placeholder="Item Name" class="newRestItemName" required>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <input type="number" placeholder="Price" step="0.01" min="0" class="newRestPrice" required>
+                    <input type="text" placeholder="Category" class="newRestCategory">
+                </div>
+            `;
+            container.appendChild(item);
+        }
+
+        function submitMenuItems() {
+            if (!currentRestaurantId) {
+                alert("No restaurant selected");
+                return;
+            }
+
+            const itemNames = document.querySelectorAll(".newItemName");
+            const prices = document.querySelectorAll(".newPrice");
+            const categories = document.querySelectorAll(".newCategory");
+            const msgDiv = document.getElementById("addMenuMsg");
+
+            if (itemNames.length === 0) {
+                msgDiv.innerHTML = '<div class="msg error">Add at least one item!</div>';
+                return;
+            }
+
+            let menuData = [];
+            for (let i = 0; i < itemNames.length; i++) {
+                const itemName = (itemNames[i]?.value || "").trim();
+                const price = (prices[i]?.value || "").trim();
+                const category = (categories[i]?.value || "").trim();
+                if (!itemName || !price) {
+                    msgDiv.innerHTML = '<div class="msg error">Please fill in all details!</div>';
+                    return;
+                }
+                menuData.push({
+                    ItemName: itemName,
+                    Price: parseFloat(price),
+                    Category: category || "General"
+                });
+            }
+            msgDiv.innerHTML = '<div class="loading">Saving...</div>';
+            fetch(`http://localhost:3000/restaurants/${currentRestaurantId}/menu`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    MenuItems: menuData
+                })
+            }).then(async res => {
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || data.message);
+                return data;
+            })
+                .then(data => {
+                    msgDiv.innerHTML = `<div class="msg success">Saved successfully!</div>`;
+                    setTimeout(() => {
+                        loadRestaurants();
+                        const restName = document.getElementById('addMenuTitle').textContent.replace('Manage Menu: ', '');
+                        viewRestaurantMenu(currentRestaurantId, restName);
+                        msgDiv.innerHTML = "";
+                    }, 1000);
+                })
+                .catch(err => {
+                    msgDiv.innerHTML = `<div class="msg error">Error: ${err.message}</div>`;
+                });
+        }
+
+        function editRestaurant(restId) {
+            const rest = restaurants.find(r => r.RestaurantID === restId);
+            if (!rest) return;
+
+            document.getElementById("editRestId").value = restId;
+            document.getElementById("editRestName").value = rest.Name;
+            document.getElementById("editRestLocation").value = rest.Location;
+            document.getElementById("editRestContact").value = rest.Contact || "";
+            document.getElementById("editRestMsg").innerHTML = "";
+            document.getElementById("editRestModal").style.display = "block";
+        }
+
+        function closeEditModal() {
+            document.getElementById("editRestModal").style.display = "none";
+        }
+
+        function updateRestaurant() {
+            const restId = document.getElementById("editRestId").value;
+            const name = document.getElementById("editRestName").value.trim();
+            const location = document.getElementById("editRestLocation").value.trim();
+            const contact = document.getElementById("editRestContact").value.trim();
+            const msgDiv = document.getElementById("editRestMsg");
+
+            if (!name || !location || !contact) {
+                msgDiv.innerHTML = '<div class="msg error">Please fill in all fields!</div>';
+                return;
+            }
+
+            msgDiv.innerHTML = '<div class="loading">Updating...</div>';
+
+            fetch(`http://localhost:3000/restaurants/${restId}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    Name: name,
+                    Location: location,
+                    Contact: contact
+                })
+            })
+                .then(async res => {
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.error || data.message);
+                    return data;
+                })
+                .then(() => {
+                    msgDiv.innerHTML = '<div class="msg success">Updated successfully!</div>';
+                    setTimeout(() => {
+                        closeEditModal();
+                        loadRestaurants();
+                    }, 1000);
+                })
+                .catch(err => {
+                    msgDiv.innerHTML = `<div class="msg error">Error: ${err.message}</div>`;
+                });
+        }
+
+        function deleteRestaurant(restId, restName) {
+            if (!confirm(`Delete "${restName}"? This will also delete its menu.`)) {
+                return;
+            }
+
+            fetch(`http://localhost:3000/restaurants/${restId}`, {
+                method: "DELETE"
+            })
+                .then(async res => {
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.error || data.message);
+                    return data;
+                })
+                .then(() => {
+                    loadRestaurants();
+                })
+                .catch(err => {
+                    alert("Error: " + err.message);
+                });
+        }
+
+        // Security Logic
+        const ADMIN_PASSWORD = "DBMS";
+
+        function checkPassword() {
+            const password = document.getElementById("adminPassword").value;
+            const errorDiv = document.getElementById("loginError");
+
+            if (password === ADMIN_PASSWORD) {
+                sessionStorage.setItem("adminLoggedIn", "true");
+                document.getElementById("loginOverlay").style.display = "none";
+                document.getElementById("adminContent").classList.add("active");
+                loadRestaurants();
+            } else {
+                errorDiv.style.display = "block";
+                document.getElementById("adminPassword").value = "";
+                document.getElementById("adminPassword").focus();
+                setTimeout(() => {
+                    errorDiv.style.display = "none";
+                }, 3000);
+            }
+        }
+
+        function logout() {
+            document.getElementById("logoutModal").style.display = "block";
+        }
+
+        function closeLogoutModal() {
+            document.getElementById("logoutModal").style.display = "none";
+        }
+
+        function performLogout() {
+            sessionStorage.removeItem("adminLoggedIn");
+            location.reload();
+        }
+
+        function checkLoginStatus() {
+            const isLoggedIn = sessionStorage.getItem("adminLoggedIn");
+            if (isLoggedIn === "true") {
+                document.getElementById("loginOverlay").style.display = "none";
+                document.getElementById("adminContent").classList.add("active");
+                loadRestaurants();
+            } else {
+                document.getElementById("loginOverlay").style.display = "flex";
+                document.getElementById("adminContent").classList.remove("active");
+                setTimeout(() => {
+                    document.getElementById("adminPassword").focus();
+                }, 100);
+            }
+        }
+
+        function deleteMenuItem(menuId, itemName) {
+            if (!confirm(`Delete "${itemName}"?`)) return;
+            fetch(`http://localhost:3000/menu/${menuId}`, {
+                method: 'DELETE'
+            })
+                .then(async res => {
+                    if (!res.ok) throw new Error('Failed to delete');
+                    // Remove from UI
+                    const list = document.getElementById('existingMenuList');
+                    const el = list.querySelector(`[data-menuid='${menuId}']`);
+                    if (el) el.remove();
+                    loadRestaurants(); // refresh main list counts
+                })
+                .catch(err => alert(err.message));
+        }
+
+        function editMenuItem(menuId, restId) {
+            fetch(`http://localhost:3000/menu/${menuId}`)
+                .then(res => res.json())
+                .then(data => {
+                    const item = data.item || data;
+                    document.getElementById('editMenuId').value = menuId;
+                    document.getElementById('editMenuRestId').value = restId || currentRestaurantId;
+                    document.getElementById('editMenuItemName').value = item.ItemName;
+                    document.getElementById('editMenuPrice').value = item.Price;
+                    document.getElementById('editMenuCategory').value = item.Category;
+                    document.getElementById('editMenuModal').style.display = 'block';
+                });
+        }
+
+        function closeEditMenuModal() {
+            document.getElementById('editMenuModal').style.display = 'none';
+        }
+
+        function updateMenuItem() {
+            const menuId = document.getElementById('editMenuId').value;
+            const name = document.getElementById('editMenuItemName').value.trim();
+            const price = document.getElementById('editMenuPrice').value;
+            const category = document.getElementById('editMenuCategory').value.trim();
+            const msgDiv = document.getElementById('editMenuMsg');
+
+            if (!name || !price) {
+                msgDiv.innerHTML = '<div class="msg error">Name and Price required</div>';
+                return;
+            }
+
+            msgDiv.innerHTML = '<div class="loading">Saving...</div>';
+
+            fetch(`http://localhost:3000/menu/${menuId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ItemName: name,
+                    Price: parseFloat(price),
+                    Category: category
+                })
+            })
+                .then(async res => {
+                    if (!res.ok) throw new Error('Failed');
+                    msgDiv.innerHTML = '<div class="msg success">Saved!</div>';
+                    setTimeout(() => {
+                        document.getElementById('editMenuModal').style.display = 'none';
+                        const restName = document.getElementById('addMenuTitle').textContent.replace('Manage Menu: ', '');
+                        viewRestaurantMenu(currentRestaurantId, restName);
+                    }, 800);
+                })
+                .catch(err => {
+                    msgDiv.innerHTML = `<div class="msg error">${err.message}</div>`;
+                });
+        }
+
+        checkLoginStatus();
+
+        // Force check on back button navigation (BFCache)
+        window.addEventListener('pageshow', function (event) {
+            checkLoginStatus();
+        });
+
+        window.onclick = function (event) {
+            if (event.target === document.getElementById("editRestModal")) closeEditModal();
+            if (event.target === document.getElementById("editMenuModal")) closeEditMenuModal();
+            if (event.target === document.getElementById("logoutModal")) closeLogoutModal();
+        }
+    </script>
+</body>
+
+</html>

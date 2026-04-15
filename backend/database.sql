@@ -1,0 +1,79 @@
+-- SQLite Database Schema for Food Ordering System
+-- This file creates all tables needed for the application
+
+-- Create CUSTOMER table
+CREATE TABLE IF NOT EXISTS CUSTOMER (
+    CustomerID INTEGER PRIMARY KEY AUTOINCREMENT,
+    Name TEXT NOT NULL,
+    Email TEXT,
+    Phone TEXT,
+    Address TEXT
+);
+
+-- Create RESTAURANT table
+CREATE TABLE IF NOT EXISTS RESTAURANT (
+    RestaurantID INTEGER PRIMARY KEY AUTOINCREMENT,
+    Name TEXT NOT NULL,
+    Location TEXT NOT NULL,
+    Contact TEXT
+);
+
+-- Create MENU table
+CREATE TABLE IF NOT EXISTS MENU (
+    MenuID INTEGER PRIMARY KEY AUTOINCREMENT,
+    RestaurantID INTEGER NOT NULL,
+    ItemName TEXT NOT NULL,
+    Price REAL NOT NULL,
+    Category TEXT,
+    FOREIGN KEY (RestaurantID) REFERENCES RESTAURANT(RestaurantID) ON DELETE CASCADE
+);
+
+-- Create ORDERS table
+CREATE TABLE IF NOT EXISTS ORDERS (
+    OrderID INTEGER PRIMARY KEY AUTOINCREMENT,
+    CustomerID INTEGER NOT NULL,
+    RestaurantID INTEGER NOT NULL,
+    OrderDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    Status TEXT DEFAULT 'Placed',
+    TotalAmount REAL NOT NULL,
+    FOREIGN KEY (CustomerID) REFERENCES CUSTOMER(CustomerID),
+    FOREIGN KEY (RestaurantID) REFERENCES RESTAURANT(RestaurantID)
+);
+
+-- Create ORDERDETAILS table
+CREATE TABLE IF NOT EXISTS ORDERDETAILS (
+    OrderDetailID INTEGER PRIMARY KEY AUTOINCREMENT,
+    OrderID INTEGER NOT NULL,
+    MenuID INTEGER NOT NULL,
+    Quantity INTEGER DEFAULT 1,
+    Subtotal REAL NOT NULL,
+    FOREIGN KEY (OrderID) REFERENCES ORDERS(OrderID) ON DELETE CASCADE,
+    FOREIGN KEY (MenuID) REFERENCES MENU(MenuID)
+);
+
+-- Create PAYMENT table
+CREATE TABLE IF NOT EXISTS PAYMENT (
+    PaymentID INTEGER PRIMARY KEY AUTOINCREMENT,
+    OrderID INTEGER NOT NULL,
+    Amount REAL NOT NULL,
+    PaymentMethod TEXT DEFAULT 'Card',
+    PaymentStatus TEXT DEFAULT 'Completed',
+    FOREIGN KEY (OrderID) REFERENCES ORDERS(OrderID)
+);
+
+-- Create DELIVERY table
+CREATE TABLE IF NOT EXISTS DELIVERY (
+    DeliveryID INTEGER PRIMARY KEY AUTOINCREMENT,
+    OrderID INTEGER NOT NULL,
+    DeliveryPartnerName TEXT,
+    DeliveryStatus TEXT DEFAULT 'Pending',
+    DeliveryTime DATETIME,
+    FOREIGN KEY (OrderID) REFERENCES ORDERS(OrderID)
+);
+
+-- Create indexes for better performance
+CREATE INDEX IF NOT EXISTS idx_menu_restaurant ON MENU(RestaurantID);
+CREATE INDEX IF NOT EXISTS idx_orders_customer ON ORDERS(CustomerID);
+CREATE INDEX IF NOT EXISTS idx_orders_restaurant ON ORDERS(RestaurantID);
+CREATE INDEX IF NOT EXISTS idx_orderdetails_order ON ORDERDETAILS(OrderID);
+
